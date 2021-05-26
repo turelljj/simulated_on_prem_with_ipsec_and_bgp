@@ -1,10 +1,14 @@
 # Goal
 simulate On-Prem env with centos on AWS (different vpc)
 
+# pre
+this module use ansible for configuring 'on-prem', so ansible is needed.
+
 # Tools
 on-prem : centos8
 ipsec   : strongswan
 bgp     : frrouting
+
 
 # Required variables
 - AWS_SECRET_ID
@@ -18,4 +22,3 @@ bgp     : frrouting
 - tunnel2_shared_key
 - aws_tunnel_2_insde_ip
 - on_prem_tunnel_2_inside_ip
-

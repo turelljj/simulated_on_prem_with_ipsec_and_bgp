@@ -1,0 +1,22 @@
+!
+! Zebra configuration saved from vty
+!   2021/05/25 14:18:03
+!
+frr version 7.0
+frr defaults traditional
+!
+hostname on-prem
+!
+!
+!
+router bgp 65000
+ neighbor {{ aws_tunnel_1_inside_ip }} remote-as 64512
+ neighbor {{ aws_tunnel_2_inside_ip }} remote-as 64512
+ !
+ address-family ipv4 unicast
+  network 192.168.1.0/24
+ exit-address-family
+!
+!
+line vty
+!

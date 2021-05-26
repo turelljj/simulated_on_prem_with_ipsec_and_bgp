@@ -1,0 +1,28 @@
+# Template for initial configuration of StrongSwan
+data "template_file" "strongswanipsecconf" {
+  template = "${file("templates/strongswanipsecconf.tpl")}"
+
+  vars = {
+    strongswanleft        = var.strongswan_private_ip_address
+    strongswanleftsubnet  = var.strongswan_subnet
+    strongswanright       = var.aws_vpn_ip_address
+    strongswanrightsubnet = var.aws_vpc_subnet
+  }
+  # depends_on = [
+  #   data.azurerm_public_ip.azurevpnpubip,
+  # ]
+}
+
+# Template for the shared key configuration of StrongSwan VPN
+data "template_file" "strongswanipsecsecrets" {
+  template = "${file("templates/strongswanipsecsecrets.tpl")}"
+
+  vars = {
+    strongswanlocalip   = var.strongswan_private_ip_address
+    azurevpngwpublicip  = var.aws_vpn_ip_address
+    strongswansharedkey = var.aws_vpn_presharedkey
+  }
+  # depends_on = [
+  #   data.azurerm_public_ip.azurevpnpubip,
+  # ]
+}

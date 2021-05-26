@@ -1,0 +1,21 @@
+### dummy interface for testing
+ip link add dummy0 type dummy
+ip address add 192.168.1.10/24 dev dummy0
+
+#### ipsec1
+ip link add ipsec1 type xfrm dev eth0 if_id 42
+# or if not supported by iproute2 yet:
+#/usr/local/libexec/ipsec/xfrmi --name ipsec0 --id 42 --dev eth0
+
+ip link set ipsec1 up
+#ip route add vpc_cidr  dev ipsec1
+ip address add {{ on_prem_tunnel_1_inside_ip }}/30 dev ipsec1
+
+#### ipsec2
+ip link add ipsec2 type xfrm dev eth0 if_id 43
+# or if not supported by iproute2 yet:
+#/usr/local/libexec/ipsec/xfrmi --name ipsec0 --id 42 --dev eth0
+
+ip link set ipsec2 up
+#ip route add vpc_cidr  dev ipsec2
+ip address add {{ on_prem_tunnel_2_inside_ip }}/30 dev ipsec2

@@ -1,0 +1,76 @@
+---
+- name: set up centos8 as on-prem ipsec vpn
+  hosts: on-prem
+  remote_user: centos
+  become: yes
+  vars_files:
+    - variables.yml
+
+  tasks:
+  - name: Disable SELinux
+    ansible.posix.selinux:
+      state: disabled
+
+  - name: install EPEL for strongswan
+    package:
+      name: epel-release
+      state: present
+  
+
+  - name: install strongswan
+    package:
+      name: strongswan
+      state: latest
+  
+  - name: update libgcrypt dependancy for swanctl
+    package:
+      name: libgcrypt
+      state: latest
+
+  - name: copy strongswan.conf -> /etc/strongswan/strongswan.conf
+    template:
+      src: templates/strongswan_strongswan.conf.tpl.j2
+      dest: /etc/strongswan/strongswan.conf
+
+  - name: copy swanctl.conf -> /etc/strongswan/swanctl/swanctl.conf
+    template:
+      src: templates/strongswan_swanctl.conf.tpl.j2
+      dest: /etc/strongswan/swanctl/swanctl.conf
+
+  - name: copy up_down.sh -> /home/ec2-user/up_down.sh
+    template:
+      src: templates/up_down.sh.tpl.j2
+      dest: /etc/strongswan/up_down.sh
+
+  - name: restart strongswan
+    service:
+      name: strongswan
+      state: restarted
+
+  - name: install frrouting
+    package:
+      name: frr
+      state: latest
+
+  - name: copy frrouting daemons -> /etc/frr/daemons
+    template:
+      src: templates/frr_daemons.tpl.j2
+      dest: /etc/frr/daemons
+  
+  - name: copy bgpd.conf -> /etc/frr/bgpd.conf
+    template:
+      src: templates/frr_bgpd.conf.tpl.j2
+      dest: /etc/frr/bgpd.conf
+
+  - name: copy zebra.conf -> /etc/frr/zebra.conf
+    template:
+      src: templates/frr_zebra.conf.tpl.j2
+      dest: /etc/frr/zebra.conf
+  
+  - name: restart frrouting
+    service: 
+      name: frr
+      state: restarted
+  
+  - name: setup ipsec xfrm interface and dummy0 for testing
+    command: "sh /etc/strongswan/up_down.sh"

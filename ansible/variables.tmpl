@@ -1,0 +1,14 @@
+local_addr: ${aws_instance_on-prem_private_ip}
+local_public_addr: ${aws_instance_on-prem_public_ip}
+
+tunnel1_public_ip: ${tunnel1_public_ip}
+local_psk_1: ${tunnel1_shared_key}
+remote_psk_1: ${tunnel1_shared_key}
+aws_tunnel_1_inside_ip: ${aws_tunnel_1_insde_ip}
+on_prem_tunnel_1_inside_ip: ${on_prem_tunnel_1_inside_ip}
+
+tunnel2_public_ip: ${tunnel2_public_ip}
+local_psk_2: ${tunnel2_shared_key}
+remote_psk_2: ${tunnel2_shared_key}
+aws_tunnel_2_inside_ip: ${aws_tunnel_2_insde_ip}
+on_prem_tunnel_2_inside_ip: ${on_prem_tunnel_2_inside_ip}
